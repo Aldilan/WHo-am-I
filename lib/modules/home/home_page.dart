@@ -50,72 +50,77 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
-      body: ListView(
-        children: [
-          Stack(
-            children: [
-              Container(
-                child: ClipPath(
-                  clipper: ClipPathClass(),
-                  child: Container(
-                    color: Colors.purple[800], // Set the desired color
-                    width: MediaQuery.of(context).size.width,
-                    height: 120,
-                  ),
-                ),
-              ),
-              Obx(
-                () => Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    c.userId.value == '' || c.myData.isEmpty
-                        ? NonUserCard()
-                        : ProfileCard(
-                            myData: c.myData,
-                          ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Container(
-            color: Color.fromARGB(255, 239, 239, 239),
-            height: 10,
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+      body: RefreshIndicator(
+        onRefresh: () async {
+          c.loadData();
+        },
+        child: ListView(
+          children: [
+            Stack(
               children: [
-                Text(
-                  'New user',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
+                Container(
+                  child: ClipPath(
+                    clipper: ClipPathClass(),
+                    child: Container(
+                      color: Colors.purple[800], // Set the desired color
+                      width: MediaQuery.of(context).size.width,
+                      height: 120,
+                    ),
                   ),
                 ),
-                SizedBox(height: 15),
-                Container(
-                  height: 129,
-                  width: MediaQuery.of(context).size.width,
-                  child: Obx(
-                    () => ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: c.usersData.length,
-                      itemBuilder: (context, index) {
-                        return UserCard(userData: c.usersData[index]);
-                      },
-                    ),
+                Obx(
+                  () => Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      c.userId.value == '' || c.myData.isEmpty
+                          ? NonUserCard()
+                          : ProfileCard(
+                              myData: c.myData,
+                            ),
+                    ],
                   ),
                 ),
               ],
             ),
-          ),
-        ],
+            SizedBox(
+              height: 20,
+            ),
+            Container(
+              color: Color.fromARGB(255, 239, 239, 239),
+              height: 10,
+            ),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Other User',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  SizedBox(height: 15),
+                  Container(
+                    height: 129,
+                    width: MediaQuery.of(context).size.width,
+                    child: Obx(
+                      () => ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: c.usersData.length,
+                        itemBuilder: (context, index) {
+                          return UserCard(userData: c.usersData[index]);
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

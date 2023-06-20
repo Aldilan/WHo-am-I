@@ -3,7 +3,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_animated_button/flutter_animated_button.dart';
 import 'package:get/get.dart';
-import 'package:who_am_i/modules/form/form_page.dart';
+import 'package:who_am_i/modules/user/form/form_page.dart';
 
 class NonUserCard extends StatelessWidget {
   const NonUserCard({super.key});

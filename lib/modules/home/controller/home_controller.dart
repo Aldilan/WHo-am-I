@@ -24,6 +24,11 @@ class HomeController extends GetxController {
     super.dispose();
   }
 
+  void loadData() {
+    setUserId();
+    getUsersData();
+  }
+
   Future<void> setUserId() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? userIdPrefs = prefs.getString('userId');

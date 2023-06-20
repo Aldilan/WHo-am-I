@@ -1,10 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_animated_button/flutter_animated_button.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
-import 'package:who_am_i/modules/form/controller/form_controller.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:who_am_i/modules/user/form/controller/form_controller.dart';
 
 class FormPage extends StatelessWidget {
   FormPage({super.key});
@@ -33,27 +36,43 @@ class FormPage extends StatelessWidget {
         child: ListView(
           children: [
             Center(
-                child: Container(
-                    padding: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                        color: Colors.black12,
-                        borderRadius: BorderRadius.all(Radius.circular(
-                            MediaQuery.of(context).size.width * 0.2))),
-                    child: Icon(
-                      Icons.person,
-                      color: Colors.white,
-                      size: MediaQuery.of(context).size.width * 0.2,
-                    ))),
+                child: Obx(
+              () => c.pickedImage.value == null
+                  ? Container(
+                      padding: EdgeInsets.all(
+                          MediaQuery.of(context).size.width * 0.01),
+                      decoration: BoxDecoration(
+                          color: Colors.black12,
+                          borderRadius: BorderRadius.all(Radius.circular(
+                              MediaQuery.of(context).size.width * 0.2))),
+                      child: Icon(
+                        Icons.person,
+                        color: Colors.white,
+                        size: MediaQuery.of(context).size.width * 0.2,
+                      ),
+                    )
+                  : ClipOval(
+                      child: Image.file(
+                      File(c.pickedImage.value!.path),
+                      fit: BoxFit.cover,
+                      width: MediaQuery.of(context).size.width * 0.21,
+                      height: MediaQuery.of(context).size.width * 0.21,
+                    )),
+            )),
             SizedBox(
               height: 15,
             ),
-            Text(
-              'Who am I?',
-              style: TextStyle(
-                  color: Colors.purple[800],
-                  fontWeight: FontWeight.w600,
-                  fontSize: 30),
-              textAlign: TextAlign.center,
+            Obx(
+              () => Text(
+                c.nameInputShow.value == ''
+                    ? 'Who am I?'
+                    : c.nameInputShow.value,
+                style: TextStyle(
+                    color: Colors.purple[800],
+                    fontWeight: FontWeight.w600,
+                    fontSize: 30),
+                textAlign: TextAlign.center,
+              ),
             ),
             SizedBox(
               height: 15,
@@ -218,56 +237,118 @@ class FormPage extends StatelessWidget {
             Obx(
               () => Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Address',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-                  ),
-                  SizedBox(height: 10),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Longitude: '),
-                      Text(c.longitudePoint.toString()),
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Latitude: '),
-                      Text(c.latitudePoint.toString()),
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Address: '),
-                      Flexible(child: Text(c.address.toString())),
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                  AnimatedButton(
-                    onPress: () {
-                      c.getLocation();
-                    },
-                    height: 50,
-                    borderRadius: 5,
-                    width: MediaQuery.of(context).size.width,
-                    text: 'Get your location',
-                    textStyle: TextStyle(
-                      fontSize: 15,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    selectedTextColor: Colors.black,
-                    transitionType: TransitionType.TOP_CENTER_ROUNDER,
-                    selectedBackgroundColor: Color.fromARGB(255, 243, 243, 243),
-                    backgroundColor: Color.fromARGB(255, 86, 0, 101),
-                    borderWidth: 1,
-                  ),
-                ],
+                children: c.locButtonClicked.value
+                    ? [
+                        Text(
+                          'Address',
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.w600),
+                        ),
+                        SizedBox(height: 10),
+                        LoadingAnimationWidget.waveDots(
+                          color: const Color.fromARGB(255, 106, 27, 154),
+                          size: MediaQuery.of(context).size.width * 0.08,
+                        ),
+                        SizedBox(height: 10),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          height: 50,
+                          child: ElevatedButton(
+                              onPressed: () {
+                                c.getLocation(context);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      Color.fromARGB(255, 86, 0, 101)),
+                              child: Text(
+                                'Get your location',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              )),
+                        ),
+                      ]
+                    : c.address.value == ''
+                        ? [
+                            Text(
+                              'Address',
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.w600),
+                            ),
+                            SizedBox(height: 10),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              height: 50,
+                              child: ElevatedButton(
+                                  onPressed: () {
+                                    c.getLocation(context);
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor:
+                                          Color.fromARGB(255, 86, 0, 101)),
+                                  child: Text(
+                                    'Get your location',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  )),
+                            ),
+                          ]
+                        : [
+                            Text(
+                              'Address',
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.w600),
+                            ),
+                            SizedBox(height: 10),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Longitude: '),
+                                Text(c.longitudePoint.toString()),
+                              ],
+                            ),
+                            SizedBox(height: 10),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Latitude: '),
+                                Text(c.latitudePoint.toString()),
+                              ],
+                            ),
+                            SizedBox(height: 10),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Address: '),
+                                Flexible(child: Text(c.address.toString())),
+                              ],
+                            ),
+                            SizedBox(height: 10),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              height: 50,
+                              child: ElevatedButton(
+                                  onPressed: () {
+                                    c.getLocation(context);
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor:
+                                          Color.fromARGB(255, 86, 0, 101)),
+                                  child: Text(
+                                    'Get your location',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  )),
+                            ),
+                          ],
               ),
             ),
             SizedBox(
@@ -275,7 +356,7 @@ class FormPage extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () {
-                c.pickImage();
+                c.pickImage(context);
               },
               child: Container(
                 decoration: BoxDecoration(

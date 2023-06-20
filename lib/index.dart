@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:get/get.dart';
 import 'package:who_am_i/globals/colors.dart';
-import 'package:who_am_i/modules/form/form_page.dart';
+import 'package:who_am_i/modules/user/form/form_page.dart';
 import 'package:who_am_i/modules/history/history_page.dart';
 import 'package:who_am_i/modules/home/home_page.dart';
 
