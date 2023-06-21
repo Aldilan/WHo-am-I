@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:get/get.dart';
+import 'package:who_am_i/modules/history/controller/history_controller.dart';
 import 'package:who_am_i/modules/history/widgets/history_card.dart';
 
 class HistoryPage extends StatelessWidget {
-  const HistoryPage({super.key});
+  HistoryPage({super.key});
+  HistoryController c = Get.put(HistoryController());
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +18,7 @@ class HistoryPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Your Last Activites',
+              'Status',
               style: TextStyle(
                   color: Colors.purple[800],
                   fontSize: 30,
@@ -26,9 +29,12 @@ class HistoryPage extends StatelessWidget {
             ),
             Expanded(
               child: ListView.builder(
-                  itemCount: 100,
+                  itemCount: c.statusData.length,
                   itemBuilder: ((context, index) {
-                    return HistoryCard();
+                    return HistoryCard(
+                      statusData: c.statusData[index],
+                      index: index + 1,
+                    );
                   })),
             )
           ],

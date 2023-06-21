@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:who_am_i/globals/api_url.dart';
+import 'package:device_info/device_info.dart';
 
 class ValidationController extends GetxController {
   final Dio _dio = Dio();

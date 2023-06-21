@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 
 class HistoryCard extends StatelessWidget {
-  const HistoryCard({Key? key}) : super(key: key);
+  final dynamic statusData;
+  final int index;
+
+  HistoryCard({Key? key, required this.statusData, required this.index})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    String indexShow = index.toString();
     return Container(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -12,7 +17,7 @@ class HistoryCard extends StatelessWidget {
           Container(
             margin: EdgeInsets.only(top: 15),
             child: Text(
-              '1',
+              indexShow,
               style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700),
             ),
           ),
@@ -31,15 +36,20 @@ class HistoryCard extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Lorem ipsum dolor sit amet consectetur adiprisicing elit.',
+                              statusData['title'],
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 16,
+                                fontSize: 20,
                               ),
                             ),
                             SizedBox(height: 5),
                             Text(
-                              'Velit a delectus sed voluptas quam voluptatibus facilis similique tempore at nam!',
+                              statusData['content'],
+                              style: TextStyle(fontSize: 18),
+                            ),
+                            SizedBox(height: 5),
+                            Text(
+                              'From : ' + statusData['user_id'].toString(),
                               style: TextStyle(fontSize: 14),
                             ),
                           ],

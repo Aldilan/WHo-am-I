@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_button/flutter_animated_button.dart';
 import 'package:get/get.dart';
+import 'package:who_am_i/modules/auth/login/controller/login_controller.dart';
 import 'package:who_am_i/modules/auth/register/register_page.dart';
 
 class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+  LoginPage({super.key});
+  LoginController c = Get.put(LoginController());
 
   @override
   Widget build(BuildContext context) {
@@ -48,13 +50,14 @@ class LoginPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Name',
+                  'Username',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                 ),
                 SizedBox(
                   height: 10,
                 ),
                 TextFormField(
+                  controller: c.usernameInput,
                   decoration: InputDecoration(
                       hintText: 'Enter your name here',
                       filled: true,
@@ -81,6 +84,7 @@ class LoginPage extends StatelessWidget {
                   height: 10,
                 ),
                 TextFormField(
+                  controller: c.passwordInput,
                   obscureText: true,
                   decoration: InputDecoration(
                       hintText: 'Enter your password here',
@@ -98,7 +102,9 @@ class LoginPage extends StatelessWidget {
               height: 10,
             ),
             AnimatedButton(
-              onPress: () {},
+              onPress: () {
+                c.sendData(context);
+              },
               height: 50,
               borderRadius: 5,
               width: MediaQuery.of(context).size.width,

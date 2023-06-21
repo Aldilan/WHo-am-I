@@ -116,7 +116,7 @@ class StatusFormPage extends StatelessWidget {
               height: 50,
               borderRadius: 5,
               width: MediaQuery.of(context).size.width,
-              text: 'LOGIN',
+              text: 'SEND',
               textStyle: TextStyle(
                   fontSize: 15,
                   color: Colors.white,

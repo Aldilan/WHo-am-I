@@ -65,6 +65,19 @@ class StatusFormController extends GetxController {
 
         // Handle the response
         if (response.statusCode == 200) {
+          CoolAlert.show(
+            barrierDismissible: true,
+            onConfirmBtnTap: () {
+              Future.delayed(Duration(seconds: 2), () {
+                Get.offAllNamed('/');
+              });
+            },
+            backgroundColor: Colors.deepPurple,
+            confirmBtnColor: Colors.deepPurple,
+            context: context,
+            type: CoolAlertType.success,
+            text: "Status successfully sended!",
+          );
         } else {
           CoolAlert.show(
             backgroundColor: Colors.deepPurple,

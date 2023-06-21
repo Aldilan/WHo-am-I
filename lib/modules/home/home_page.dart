@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:who_am_i/modules/history/widgets/history_card.dart';
 import 'package:who_am_i/modules/home/controller/home_controller.dart';
 import 'package:who_am_i/modules/home/widgets/clippath_widget.dart';
@@ -18,10 +19,27 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         elevation: 0,
         actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.menu),
-            iconSize: 35,
+          DropdownButtonHideUnderline(
+            child: DropdownButton2<String>(
+              items: c.dropdownItems,
+              onChanged: (value) {
+                c.dropdownRespond(value, context);
+              },
+              customButton: const Icon(
+                Icons.list,
+                size: 46,
+                color: Colors.white,
+              ),
+              dropdownStyleData: DropdownStyleData(
+                width: 160,
+                padding: const EdgeInsets.symmetric(vertical: 6),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4),
+                  color: Colors.deepPurple,
+                ),
+                offset: const Offset(0, 8),
+              ),
+            ),
           ),
           SizedBox(
             width: 15,
