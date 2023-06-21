@@ -11,7 +11,10 @@ import 'package:http_parser/http_parser.dart' hide FormData;
 import 'package:intl/intl.dart';
 import 'package:who_am_i/globals/api_url.dart';
 
-class RegisterController extends GetxController {
+class DetailController extends GetxController {
+  final dynamic userData;
+  DetailController({required this.userData});
+
   final picker = ImagePicker();
   final pickedImage = Rx<XFile?>(null);
   final dio.Dio _dio = dio.Dio();
@@ -27,15 +30,33 @@ class RegisterController extends GetxController {
   RxString longitudePoint = RxString('');
   RxString address = RxString('');
   RxBool locButtonClicked = RxBool(false);
+  RxBool isEdit = RxBool(false);
 
   @override
   void onInit() {
+    print(userData);
     super.onInit();
-    birthInput.text = '';
+    nameInput.text = userData['name'];
+    usernameInput.text = userData['username'];
+    parseBirthDate();
+    genderOption.value = userData['gender'];
+    address.value = userData['address'];
 
     nameInput.addListener(() {
       nameInputShow.value = nameInput.text;
     });
+  }
+
+  void clickEdit() {
+    isEdit.value = !isEdit.value;
+  }
+
+  void parseBirthDate() {
+    String birthString = userData['birth'];
+    DateTime birthDate = DateTime.parse(birthString);
+    String formattedBirthDate = DateFormat('yyyy-MM-dd').format(birthDate);
+
+    birthInput.text = formattedBirthDate;
   }
 
   void lowercaseUsername(value) {
@@ -128,7 +149,7 @@ class RegisterController extends GetxController {
     pickedImage.value = image;
   }
 
-  Future<void> sendData(context) async {
+  Future<void> updateData(context) async {
     if (pickedImage.value == null ||
         address.value == '' ||
         genderOption.value == '' ||
@@ -155,23 +176,20 @@ class RegisterController extends GetxController {
             filename: filename,
             contentType: contentType,
           ),
-          'name': nameInput.text,
-          'username': usernameInput.text,
-          'password': passwordInput.text,
-          'birth': birthInput.text,
-          'gender': genderOption.value,
-          'address': address.value,
+          "username": usernameInput.text,
+          "password": passwordInput.text,
+          "name": nameInput.text,
+          "birth": birthInput.text,
+          "gender": genderOption.value,
+          "address": address.value,
         });
 
-        print('l');
-        final response = await _dio.post(
-          ApiURL.currentApiURL + '/users',
+        final response = await _dio.put(
+          ApiURL.currentApiURL + '/users/' + userData['id'].toString(),
           data: formData,
         );
         if (response.statusCode == 200) {
-          box.write('userId', response.data['id'].toString());
-          print(box.read('userId').toString());
-          Get.offAllNamed('/validation');
+          Get.offAllNamed('/');
         }
       } catch (e) {
         CoolAlert.show(

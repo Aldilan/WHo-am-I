@@ -14,7 +14,10 @@ class UserCard extends StatelessWidget {
     final formattedBirthDate = DateFormat('d MMMM, yyyy').format(birthDate);
     return GestureDetector(
       onTap: () {
-        Get.to(DetailPage(userData: userData));
+        Get.to(DetailPage(
+          userData: userData,
+          editCond: false,
+        ));
       },
       child: Container(
         width: 250,

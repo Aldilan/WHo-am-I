@@ -100,6 +100,9 @@ class RegisterPage extends StatelessWidget {
                   height: 10,
                 ),
                 TextFormField(
+                  onChanged: (value) {
+                    c.lowercaseUsername(value);
+                  },
                   controller: c.usernameInput,
                   maxLength: 50,
                   decoration: InputDecoration(

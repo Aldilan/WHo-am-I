@@ -17,6 +17,7 @@ class ProfileCard extends StatelessWidget {
     return GestureDetector(
       onTap: () => Get.to(DetailPage(
         userData: myData[0],
+        editCond: true,
       )),
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20),
