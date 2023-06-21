@@ -182,6 +182,7 @@ class DetailController extends GetxController {
           "birth": birthInput.text,
           "gender": genderOption.value,
           "address": address.value,
+          "device_id": box.read('device_id'),
         });
 
         final response = await _dio.put(

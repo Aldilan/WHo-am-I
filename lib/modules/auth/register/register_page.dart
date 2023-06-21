@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animated_button/flutter_animated_button.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:who_am_i/modules/auth/login/login_page.dart';
 import 'package:who_am_i/modules/auth/register/controller/register_controller.dart';
 
 class RegisterPage extends StatelessWidget {

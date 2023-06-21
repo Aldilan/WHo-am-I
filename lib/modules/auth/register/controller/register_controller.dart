@@ -161,13 +161,15 @@ class RegisterController extends GetxController {
           'birth': birthInput.text,
           'gender': genderOption.value,
           'address': address.value,
+          'device_id': box.read('device_id')
         });
+        print(box.read('device_id'));
 
-        print('l');
         final response = await _dio.post(
           ApiURL.currentApiURL + '/users',
           data: formData,
         );
+        print(response.data);
         if (response.statusCode == 200) {
           box.write('userId', response.data['id'].toString());
           print(box.read('userId').toString());
