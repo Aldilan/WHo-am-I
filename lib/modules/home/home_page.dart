@@ -5,6 +5,7 @@ import 'package:who_am_i/modules/home/controller/home_controller.dart';
 import 'package:who_am_i/modules/home/widgets/clippath_widget.dart';
 import 'package:who_am_i/modules/home/widgets/non_user_card_widget.dart';
 import 'package:who_am_i/modules/home/widgets/profile_card_widget.dart';
+import 'package:who_am_i/modules/home/widgets/status_card_widget.dart';
 import 'package:who_am_i/modules/home/widgets/user_card_widget.dart';
 
 class HomePage extends StatelessWidget {
@@ -36,9 +37,7 @@ class HomePage extends StatelessWidget {
             Obx(
               () => Expanded(
                 child: Text(
-                  c.userId.value == '' || c.myData.isEmpty
-                      ? 'Hallo'
-                      : "Hallo, ${c.myData[0]['name']}",
+                  c.myData.isEmpty ? 'Hallo' : "Hallo, ${c.myData[0]['name']}",
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 28,
@@ -72,7 +71,7 @@ class HomePage extends StatelessWidget {
                   () => Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      c.userId.value == '' || c.myData.isEmpty
+                      c.myData.isEmpty
                           ? NonUserCard()
                           : ProfileCard(
                               myData: c.myData,
@@ -112,6 +111,36 @@ class HomePage extends StatelessWidget {
                         itemCount: c.usersData.length,
                         itemBuilder: (context, index) {
                           return UserCard(userData: c.usersData[index]);
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Status',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  SizedBox(height: 15),
+                  Container(
+                    height: 129,
+                    width: MediaQuery.of(context).size.width,
+                    child: Obx(
+                      () => ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: c.statusData.length,
+                        itemBuilder: (context, index) {
+                          return StatusCard(statusData: c.statusData[index]);
                         },
                       ),
                     ),

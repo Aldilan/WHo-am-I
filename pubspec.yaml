@@ -44,9 +44,9 @@ dependencies:
   easy_loading_button: ^0.3.2
   image_picker: ^0.8.8
   dio: ^5.2.1+1
-  shared_preferences: ^2.1.2
   cool_alert: ^2.0.1
   loading_animation_widget: ^1.2.0+4
+  get_storage: ^2.1.1
 
 dev_dependencies:
   flutter_test:

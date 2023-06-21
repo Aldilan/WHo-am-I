@@ -1,20 +1,22 @@
 import 'package:get/get.dart';
 import 'package:dio/dio.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:who_am_i/globals/api_url.dart';
 
 class HomeController extends GetxController {
   final Dio _dio = Dio();
+  final box = GetStorage();
 
-  RxString userId = RxString('');
   RxList<dynamic> usersData = RxList<dynamic>();
+  RxList<dynamic> statusData = RxList<dynamic>();
   RxList myData = RxList();
 
   @override
   void onInit() {
     super.onInit();
-    setUserId();
     getUsersData();
+    getStatusData();
+    getMyData();
   }
 
   @override
@@ -25,18 +27,8 @@ class HomeController extends GetxController {
   }
 
   void loadData() {
-    setUserId();
+    getMyData();
     getUsersData();
-  }
-
-  Future<void> setUserId() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String? userIdPrefs = prefs.getString('userId');
-    if (userIdPrefs.toString() != 'null') {
-      userId.value = userIdPrefs.toString();
-      getMyData();
-    }
-    print(userId.value);
   }
 
   Future<void> getUsersData() async {
@@ -52,23 +44,32 @@ class HomeController extends GetxController {
     }
   }
 
-  Future<void> getMyData() async {
-    print(myData.value);
-    if (userId.value == '') {
-      print(userId.value);
-    } else {
-      try {
-        final response = await _dio
-            .get(ApiURL.currentApiURL + '/users?id=' + userId.toString());
-        if (response.statusCode == 200) {
-          myData.value = response.data;
-          print(myData.value);
-        } else {
-          print('Request failed with status code: ${response.statusCode}');
-        }
-      } catch (e) {
-        print('Error: $e');
+  Future<void> getStatusData() async {
+    try {
+      final response = await _dio.get(ApiURL.currentApiURL + '/status');
+      if (response.statusCode == 200) {
+        statusData.value = response.data;
+      } else {
+        print('Request failed with status code: ${response.statusCode}');
       }
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
+  Future<void> getMyData() async {
+    var userId = box.read('userId');
+    try {
+      final response = await _dio
+          .get(ApiURL.currentApiURL + '/users?id=' + userId.toString());
+      if (response.statusCode == 200) {
+        myData.value = response.data;
+        print('ini mudata');
+        print(myData.value);
+      }
+    } catch (e) {
+      box.remove('userId');
+      Get.offAllNamed('/auth/login');
     }
   }
 }

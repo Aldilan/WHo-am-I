@@ -5,18 +5,21 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geocoding/geocoding.dart' as geocoding;
+import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http_parser/http_parser.dart' hide FormData;
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:who_am_i/globals/api_url.dart';
 
-class FormController extends GetxController {
+class RegisterController extends GetxController {
   final picker = ImagePicker();
   final pickedImage = Rx<XFile?>(null);
   final dio.Dio _dio = dio.Dio();
+  final box = GetStorage();
 
   TextEditingController nameInput = TextEditingController();
+  TextEditingController usernameInput = TextEditingController();
+  TextEditingController passwordInput = TextEditingController();
   RxString nameInputShow = RxString('');
   TextEditingController birthInput = TextEditingController();
   RxString genderOption = RxString('');
@@ -27,7 +30,6 @@ class FormController extends GetxController {
 
   @override
   void onInit() {
-    // TODO: implement onInit
     super.onInit();
     birthInput.text = '';
 
@@ -86,7 +88,6 @@ class FormController extends GetxController {
       }
       locButtonClicked.value = false;
     } catch (e) {
-      print(e);
       locButtonClicked.value = false;
     }
   }
@@ -136,8 +137,6 @@ class FormController extends GetxController {
       );
     } else {
       try {
-        // Create FormData object
-
         String fileExtension =
             pickedImage.value!.path.split('.').last.toLowerCase();
         String filename = 'image.$fileExtension';
@@ -151,39 +150,31 @@ class FormController extends GetxController {
             contentType: contentType,
           ),
           'name': nameInput.text,
+          'username': usernameInput.text,
+          'password': passwordInput.text,
           'birth': birthInput.text,
           'gender': genderOption.value,
           'address': address.value,
         });
 
+        print('l');
         final response = await _dio.post(
           ApiURL.currentApiURL + '/users',
           data: formData,
         );
-
-        // Handle the response
         if (response.statusCode == 200) {
-          final SharedPreferences prefs = await SharedPreferences.getInstance();
-          await prefs.setString('userId', response.data['id'].toString());
-          CoolAlert.show(
-            backgroundColor: Colors.deepPurple,
-            confirmBtnColor: Colors.deepPurple,
-            context: context,
-            type: CoolAlertType.success,
-            text: "Data successfully sended!",
-          );
-        } else {
-          CoolAlert.show(
-            backgroundColor: Colors.deepPurple,
-            confirmBtnColor: Colors.deepPurple,
-            context: context,
-            type: CoolAlertType.error,
-            text: "Something wrong, try again later!",
-          );
+          box.write('userId', response.data['id'].toString());
+          print(box.read('userId').toString());
+          Get.offAllNamed('/validation');
         }
       } catch (e) {
-        // Error
-        // ...
+        CoolAlert.show(
+          backgroundColor: Colors.deepPurple,
+          confirmBtnColor: Colors.deepPurple,
+          context: context,
+          type: CoolAlertType.error,
+          text: "Something wrong, try again later!",
+        );
       }
     }
   }

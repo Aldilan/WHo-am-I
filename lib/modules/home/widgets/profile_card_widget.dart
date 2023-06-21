@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:who_am_i/globals/api_url.dart';
 import 'package:who_am_i/modules/user/detail/detail_page.dart';
 
@@ -11,6 +12,8 @@ class ProfileCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final birthDate = DateTime.parse(myData[0]['birth']);
+    final formattedBirthDate = DateFormat('d MMMM, yyyy').format(birthDate);
     return GestureDetector(
       onTap: () => Get.to(DetailPage(
         userData: myData[0],
@@ -48,7 +51,7 @@ class ProfileCard extends StatelessWidget {
                     SizedBox(
                       height: 15,
                     ),
-                    Text(myData[0]['birth'],
+                    Text(formattedBirthDate,
                         style: TextStyle(color: Colors.white, fontSize: 15)),
                     Text(myData[0]['gender'],
                         style: TextStyle(

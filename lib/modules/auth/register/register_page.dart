@@ -1,40 +1,27 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_animated_button/flutter_animated_button.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:who_am_i/modules/user/form/controller/form_controller.dart';
+import 'package:who_am_i/modules/auth/login/login_page.dart';
+import 'package:who_am_i/modules/auth/register/controller/register_controller.dart';
 
-class FormPage extends StatelessWidget {
-  FormPage({super.key});
-  FormController c = Get.put(FormController());
+class RegisterPage extends StatelessWidget {
+  RegisterPage({super.key});
+  RegisterController c = Get.put(RegisterController());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        leading: IconButton(
-            onPressed: () {
-              Get.back();
-            },
-            icon: Icon(
-              weight: 100,
-              size: 30,
-              Icons.arrow_back_ios_new_rounded,
-              color: Colors.purple[800],
-            )),
-      ),
       body: Container(
         padding: EdgeInsets.only(left: 25, right: 25),
         child: ListView(
           children: [
+            SizedBox(
+              height: 50,
+            ),
             Center(
                 child: Obx(
               () => c.pickedImage.value == null
@@ -92,6 +79,57 @@ class FormPage extends StatelessWidget {
                   maxLength: 30,
                   decoration: InputDecoration(
                       hintText: 'Enter your name here',
+                      filled: true,
+                      fillColor: Color.fromARGB(255, 243, 243, 243),
+                      contentPadding: EdgeInsets.all(12),
+                      border: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(width: 0, style: BorderStyle.none),
+                          borderRadius: BorderRadius.circular(5))),
+                ),
+              ],
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Username',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                TextFormField(
+                  controller: c.usernameInput,
+                  maxLength: 50,
+                  decoration: InputDecoration(
+                      hintText: 'Enter your username here',
+                      filled: true,
+                      fillColor: Color.fromARGB(255, 243, 243, 243),
+                      contentPadding: EdgeInsets.all(12),
+                      border: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(width: 0, style: BorderStyle.none),
+                          borderRadius: BorderRadius.circular(5))),
+                ),
+              ],
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Password',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                TextFormField(
+                  obscureText: true,
+                  controller: c.passwordInput,
+                  maxLength: 50,
+                  decoration: InputDecoration(
+                      hintText: 'Enter your password here',
                       filled: true,
                       fillColor: Color.fromARGB(255, 243, 243, 243),
                       contentPadding: EdgeInsets.all(12),
@@ -396,7 +434,7 @@ class FormPage extends StatelessWidget {
               height: 50,
               borderRadius: 5,
               width: MediaQuery.of(context).size.width,
-              text: 'SUBMIT',
+              text: 'CREATE',
               textStyle: TextStyle(
                   fontSize: 15,
                   color: Colors.white,
@@ -408,8 +446,29 @@ class FormPage extends StatelessWidget {
               borderWidth: 1,
             ),
             SizedBox(
-              height: 50,
+              height: 10,
             ),
+            Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Already have an account? '),
+                  Flexible(
+                      child: GestureDetector(
+                    child: Text(
+                      'Login',
+                      style: TextStyle(color: Colors.purple[800]),
+                    ),
+                    onTap: () {
+                      Get.back();
+                    },
+                  ))
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 50,
+            )
           ],
         ),
       ),
