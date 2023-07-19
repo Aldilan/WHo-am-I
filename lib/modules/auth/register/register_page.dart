@@ -398,31 +398,37 @@ class RegisterPage extends StatelessWidget {
               onTap: () {
                 c.pickImage(context);
               },
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  color: Color.fromARGB(255, 243, 243, 243),
-                ),
-                padding: EdgeInsets.symmetric(vertical: 30),
-                width: MediaQuery.of(context).size.width,
-                child: Center(
-                  child: Column(
-                    children: [
-                      Icon(
-                        Icons.image,
-                        size: MediaQuery.of(context).size.width * 0.2,
-                      ),
-                      Obx(
-                        () => Text(
-                          c.pickedImage.value == null
-                              ? 'Select your image'
-                              : 'Image selected',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 20),
-                        ),
-                      )
-                    ],
+              child: Obx(
+                () => Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: Color.fromARGB(255, 243, 243, 243),
                   ),
+                  padding: EdgeInsets.symmetric(vertical: 30),
+                  width: MediaQuery.of(context).size.width,
+                  child: c.pickedImage.value == null
+                      ? Center(
+                          child: Column(
+                            children: [
+                              Icon(
+                                Icons.image,
+                                size: MediaQuery.of(context).size.width * 0.2,
+                              ),
+                              Text(
+                                c.pickedImage.value == null
+                                    ? 'Select your image'
+                                    : 'Image selected',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600, fontSize: 20),
+                              ),
+                            ],
+                          ),
+                        )
+                      : Image.file(
+                          File(c.pickedImage.value!.path),
+                          fit: BoxFit.cover,
+                          width: MediaQuery.of(context).size.width * 0.21,
+                        ),
                 ),
               ),
             ),

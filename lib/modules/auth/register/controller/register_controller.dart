@@ -1,4 +1,6 @@
 import 'package:cool_alert/cool_alert.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'dart:io';
 import 'package:dio/dio.dart' as dio;
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -120,12 +122,33 @@ class RegisterController extends GetxController {
 
   Future<void> cameraOption() async {
     XFile? image = await picker.pickImage(source: ImageSource.camera);
-    pickedImage.value = image;
+    if (image != null) {
+      await cropImage(File(image.path));
+    }
   }
 
   Future<void> galleryOption() async {
     XFile? image = await picker.pickImage(source: ImageSource.gallery);
-    pickedImage.value = image;
+    if (image != null) {
+      await cropImage(File(image.path));
+    }
+  }
+
+  Future<void> cropImage(File imageFile) async {
+    if (imageFile != null) {
+      ImageCropper imageCropper = ImageCropper();
+      CroppedFile? croppedFile = await imageCropper.cropImage(
+        sourcePath: imageFile.path,
+        aspectRatioPresets: [
+          CropAspectRatioPreset.square,
+        ],
+      );
+
+      if (croppedFile != null) {
+        // Assign the cropped image to the pickedImage variable
+        pickedImage.value = XFile(croppedFile.path);
+      }
+    }
   }
 
   Future<void> sendData(context) async {
@@ -181,7 +204,7 @@ class RegisterController extends GetxController {
           confirmBtnColor: Colors.deepPurple,
           context: context,
           type: CoolAlertType.error,
-          text: "Something wrong, try again later!",
+          text: "Something went wrong, try again later!",
         );
       }
     }

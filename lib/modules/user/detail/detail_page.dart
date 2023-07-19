@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_button/flutter_animated_button.dart';
 import 'package:get/get.dart';
@@ -433,33 +435,42 @@ class DetailPage extends StatelessWidget {
                           onTap: () {
                             c.pickImage(context);
                           },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: Color.fromARGB(255, 243, 243, 243),
-                            ),
-                            padding: EdgeInsets.symmetric(vertical: 30),
-                            width: MediaQuery.of(context).size.width,
-                            child: Center(
-                              child: Column(
-                                children: [
-                                  Icon(
-                                    Icons.image,
-                                    size:
-                                        MediaQuery.of(context).size.width * 0.2,
-                                  ),
-                                  Obx(
-                                    () => Text(
-                                      c.pickedImage.value == null
-                                          ? 'Select your image'
-                                          : 'Image selected',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 20),
-                                    ),
-                                  )
-                                ],
+                          child: Obx(
+                            () => Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: Color.fromARGB(255, 243, 243, 243),
                               ),
+                              padding: EdgeInsets.symmetric(vertical: 30),
+                              width: MediaQuery.of(context).size.width,
+                              child: c.pickedImage.value == null
+                                  ? Center(
+                                      child: Column(
+                                        children: [
+                                          Icon(
+                                            Icons.image,
+                                            size: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.2,
+                                          ),
+                                          Text(
+                                            c.pickedImage.value == null
+                                                ? 'Select your image'
+                                                : 'Image selected',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 20),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  : Image.file(
+                                      File(c.pickedImage.value!.path),
+                                      fit: BoxFit.cover,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.21,
+                                    ),
                             ),
                           ),
                         ),
@@ -473,7 +484,7 @@ class DetailPage extends StatelessWidget {
                           height: 50,
                           borderRadius: 5,
                           width: MediaQuery.of(context).size.width,
-                          text: 'CREATE',
+                          text: 'UPDATE',
                           textStyle: TextStyle(
                               fontSize: 15,
                               color: Colors.white,

@@ -17,7 +17,7 @@ class _IndexPageState extends State<IndexPage> {
   int _currentIndex = 0;
   final List<IconData> _icons = [
     Icons.home,
-    Icons.history,
+    Icons.person,
   ];
   final List<Widget> _pages = [HomePage(), HistoryPage()];
   late PageController _pageController;
@@ -58,6 +58,7 @@ class _IndexPageState extends State<IndexPage> {
             Icons.add,
             size: 30,
             weight: 10,
+            color: Colors.white,
           ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

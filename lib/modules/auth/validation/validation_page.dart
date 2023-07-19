@@ -5,10 +5,10 @@ import 'package:who_am_i/modules/auth/validation/controller/validation_controlle
 
 class ValidationPage extends StatelessWidget {
   ValidationPage({super.key});
-  ValidationController c = Get.put(ValidationController());
 
   @override
   Widget build(BuildContext context) {
+    ValidationController c = Get.put(ValidationController(context: context));
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(

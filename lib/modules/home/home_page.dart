@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:who_am_i/modules/history/widgets/history_card.dart';
 import 'package:who_am_i/modules/home/controller/home_controller.dart';
 import 'package:who_am_i/modules/home/widgets/clippath_widget.dart';
 import 'package:who_am_i/modules/home/widgets/non_user_card_widget.dart';

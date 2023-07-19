@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cool_alert/cool_alert.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:flutter/material.dart';
@@ -6,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geocoding/geocoding.dart' as geocoding;
 import 'package:get_storage/get_storage.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http_parser/http_parser.dart' hide FormData;
 import 'package:intl/intl.dart';
@@ -141,12 +144,33 @@ class DetailController extends GetxController {
 
   Future<void> cameraOption() async {
     XFile? image = await picker.pickImage(source: ImageSource.camera);
-    pickedImage.value = image;
+    if (image != null) {
+      await cropImage(File(image.path));
+    }
   }
 
   Future<void> galleryOption() async {
     XFile? image = await picker.pickImage(source: ImageSource.gallery);
-    pickedImage.value = image;
+    if (image != null) {
+      await cropImage(File(image.path));
+    }
+  }
+
+  Future<void> cropImage(File imageFile) async {
+    if (imageFile != null) {
+      ImageCropper imageCropper = ImageCropper();
+      CroppedFile? croppedFile = await imageCropper.cropImage(
+        sourcePath: imageFile.path,
+        aspectRatioPresets: [
+          CropAspectRatioPreset.square,
+        ],
+      );
+
+      if (croppedFile != null) {
+        // Assign the cropped image to the pickedImage variable
+        pickedImage.value = XFile(croppedFile.path);
+      }
+    }
   }
 
   Future<void> updateData(context) async {

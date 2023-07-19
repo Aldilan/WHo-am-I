@@ -6,7 +6,6 @@ import 'package:who_am_i/modules/auth/login/login_page.dart';
 import 'package:who_am_i/modules/auth/register/register_page.dart';
 import 'package:who_am_i/modules/auth/validation/controller/validation_controller.dart';
 import 'package:who_am_i/modules/auth/validation/validation_page.dart';
-import 'package:who_am_i/modules/home/home_page.dart';
 
 void main() async {
   await GetStorage.init();
@@ -20,11 +19,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       initialRoute: '/validation',
-      initialBinding: BindingsBuilder(() {
-        Get.lazyPut(() => ValidationController());
-      }),
+      // initialBinding: BindingsBuilder(() {
+      //   Get.lazyPut(() => ValidationController(context: context));
+      // }),
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(primarySwatch: Colors.purple),
+      theme: ThemeData(primarySwatch: Colors.grey),
       getPages: [
         GetPage(name: '/', page: () => IndexPage()),
         GetPage(name: '/auth/login', page: () => LoginPage()),
